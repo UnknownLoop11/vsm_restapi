@@ -83,3 +83,4 @@
 > status: newBoolValue,<br>
 > accepted: newBoolValue<br>}
 > - __DELETE-request -__ removes the specific order from the store.
+"# vsm_restapi" 
