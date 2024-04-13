@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<body>
+
+<form method="post" enctype="multipart/form-data" id="myform" action="http://localhost:8000/api/test/">
+    {% csrf_token %}
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+    <br>
+    <input type="file" name="files" multiple>
+    <br>
+{#    <button type="button" onclick="submitForm()">Send</button>#}
+    <input type="submit" value="send">
+</form>
+
+<script>
+    {#function submitForm() {#}
+    {#    const form = $("#myform");#}
+    {#    const formData = new FormData(form[0]);#}
+    {#    #}
+    {#    formData.forEach((value, key) => {#}
+    {#        console.log(key, value.type);#}
+    {#    })#}
+        
+        {#$.ajax({#}
+        {#    url: '{% url 'test' %}',#}
+        {#    type: form.attr("method"),#}
+        {#    data: formData,#}
+        {#    contentType: false,#}
+        {#    processData: false,#}
+        {#    success: function(data) {#}
+        {#        console.log(data);#}
+        {#    },#}
+        {#    error: function(data) {#}
+        {#        console.log(data);#}
+        {#    }#}
+        
+    
+</script>
+
+</body>
+</html>

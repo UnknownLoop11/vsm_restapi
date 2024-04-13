@@ -1,0 +1,17 @@
+User pages:
+1. Home page
+2. Store-List
+3. Store-Info
+4. Upload user files - file upload, b&w, side, no of copies, total payment, ph no
+5. Payment
+6. Order Summary
+7. Order Tracking
+
+Store owners pages:
+1. Login page
+2. Sign up page - name, owner name, ph no, mail id, location, timings, map link, cost per page
+3. Store home page - order no, customer name, payment, file, details, accept or recject, notify customer.
+
+Additional pages:
+1. About us
+
