@@ -1,1 +1,1 @@
-web: gunicorn vsm.wsgi
+web: gunicorn vsm_restapi.wsgi
