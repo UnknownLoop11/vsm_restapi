@@ -1,7 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
-
 import json
+
 
 # Create your views here.
 
@@ -31,3 +32,7 @@ def test(request):
     #         print(e)
 
     return render(request, 'test.html')
+
+
+def home(request):
+    return HttpResponse('<h1 style="{margin: auto:}">Welcome to Prerox Rest-Api</h1>')
