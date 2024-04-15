@@ -1,6 +1,6 @@
 # __Vsm Rest Api Documentation__
 
-### Api EndPoint - <www.example.com>
+### Api EndPoint - <https://prerox-api-8d59017b6b2c.herokuapp.com/>
 
 ---
 
