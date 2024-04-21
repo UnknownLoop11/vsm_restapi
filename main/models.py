@@ -21,6 +21,11 @@ class Location(models.Model):
     long = models.DecimalField(max_digits=20, decimal_places=16)
 
 
+class Pricing(models.Model):
+    per_page = models.DecimalField(max_digits=3, decimal_places=2)
+    color = models.DecimalField(max_digits=3, decimal_places=2)
+
+
 class Store(models.Model):
     uid = models.CharField(max_length=100, unique=True)
     store_name = models.CharField(max_length=100)
@@ -29,6 +34,7 @@ class Store(models.Model):
     email = models.EmailField()
     contact_no = PhoneNumberField(region='IN')
     location = models.OneToOneField(Location, on_delete=models.CASCADE)
+    pricing = models.OneToOneField(Pricing, on_delete=models.CASCADE)
     gmap_link = models.URLField()
 
     def __str__(self):
@@ -36,8 +42,14 @@ class Store(models.Model):
 
     def delete(self, *args, **kwargs):
         location_instance = Location.objects.get(id=self.location.id)
+        pricing_instance = Pricing.objects.get(id=self.pricing.id)
         super().delete(*args, **kwargs)
         location_instance.delete()
+        pricing_instance.delete()
+
+class StoreImage(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='store/')
 
 
 class OrderDetails(models.Model):
@@ -78,6 +90,11 @@ class File(models.Model):
 
 
 @receiver(post_delete, sender=File)
+def delete_file_on_delete(sender, instance, **kwargs):
+    # Delete the file when the record is deleted
+    delete_file(instance.file.path)
+
+@receiver(post_delete, sender=StoreImage)
 def delete_file_on_delete(sender, instance, **kwargs):
     # Delete the file when the record is deleted
     delete_file(instance.file.path)

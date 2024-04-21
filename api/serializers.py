@@ -1,7 +1,7 @@
 import random
 from rest_framework import serializers
 
-from main.models import Store, Location, Customer, OrderDetails, File
+from main.models import Store, Location, Customer, OrderDetails, File, Pricing, StoreImage
 from phonenumber_field.serializerfields import PhoneNumberField
 
 
@@ -16,14 +16,28 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PricingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pricing
+        fields = '__all__'
+
+
+class StoreImageSerializer(serializers.ModelSerializer):
+    store = serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model = StoreImage
+        fields = '__all__'
+
+
 class StoreSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
+    pricing = PricingSerializer()
 
     class Meta:
         model = Store
         model_fields = [field.name for field in model._meta.fields]
 
-        fields = model_fields + ['location']
+        fields = model_fields + ['pricing', 'location']
 
 
 class OrderDetailsSerializer(serializers.ModelSerializer):
@@ -58,6 +72,8 @@ class StoreRegisterSerializer(serializers.Serializer):
     address = serializers.CharField(required=True)
     lat = serializers.DecimalField(max_digits=20, decimal_places=16)
     long = serializers.DecimalField(max_digits=20, decimal_places=16)
+    cost = serializers.JSONField(required=True)
+    images = serializers.ListField(child=serializers.ImageField())
     gmap_link = serializers.URLField(required=True)
 
     def create(self, validated_data):
@@ -65,6 +81,10 @@ class StoreRegisterSerializer(serializers.Serializer):
             address=validated_data.get('address'),
             lat=validated_data.get('lat'),
             long=validated_data.get('long')
+        )
+        pricing_instance = Pricing.objects.create(
+            per_page=validated_data.get('cost')['per_page'],
+            color=validated_data.get('cost')['color']
         )
         store_instance = Store.objects.create(
             uid=validated_data['uid'],
@@ -74,8 +94,15 @@ class StoreRegisterSerializer(serializers.Serializer):
             email=validated_data.get('email'),
             contact_no=validated_data.get('contact_no'),
             location=location_instance,
+            pricing=pricing_instance,
             gmap_link=validated_data.get('gmap_link')
         )
+
+        for image in validated_data.get('images'):
+            store_image_instance = StoreImage.objects.create(
+                store=store_instance,
+                image=image
+            )
 
         return validated_data
 
@@ -141,8 +168,6 @@ class StoreOrderSerializer(serializers.Serializer):
             )
 
         return validated_data
-
-
 
 
 class OrderUpdate(serializers.Serializer):

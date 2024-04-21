@@ -14,9 +14,11 @@
 "description": "Space Exploration Technologies Corp, manufactures and launches advanced rockets and spacecraft.",<br>
 "email": "elonmusk@gmail.com",<br>
 "contact_no": "(202) 649-2722",<br>
+"cost": {"per_page": 1.50, "color": 5.50}, <br>
 "address": "1 Rocket Road, Hawthorne, California, 90250",<br>
 "lat": 12.969872242527739,<br>
 "long": 77.62446195242269,<br>
+"images": files, <br>
 "gmap_link": "<https://maps.app.goo.gl/qC4L2YosoVzFLS7CA>"<br>
 }
 >
