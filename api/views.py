@@ -47,7 +47,7 @@ def get_store_orders(request):
         orders = Customer.objects.filter(store__uid=uid)
         serializer = CustomerSerializer(orders, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response
+    return Response(response.get_response('error'), status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -73,7 +73,7 @@ def get_store_images(request):
         images = StoreImage.objects.filter(store__uid=uid)
         serializer = StoreImageSerializer(images, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response
+    return Response()
 
 
 # Class-Based Views

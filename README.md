@@ -86,3 +86,12 @@
 > accepted: newBoolValue<br>}
 > - __DELETE-request -__ removes the specific order from the store.
 "# vsm_restapi" 
+> > - __URLpatterns__ 
+> > -    path('store/register/', register_store, name='store_registration'),  # POST
+> > -    path('store', StoreProfile.as_view(), name='store_profile'),  # GET, PUT, DELETE
+> > -    path('store/list', get_stores, name='store_list'),  # GET
+> > -    path('store/order', StoreOrder.as_view(), name='store_view'),  # POST, GET, PUT, DELETE
+> > -    path('store/order/list', get_store_orders, name="store_orders_list"),  # GET
+> > -    path('store/order/download/<int:ref_id>', generate_files, name='download_files'),
+> > -    path('store/images', get_store_images, name="store_image")
+

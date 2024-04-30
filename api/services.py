@@ -47,9 +47,13 @@ class CustomResponse:
     __responses = {
         'registered': {
             'success': 'Your store has been registered successfully.'
-        },
+        }, 'error': {
+            'error': 'Provide Query Parameters to fetch data.'
+        }
 
     }
 
     def get_response(self, context):
         return self.__responses.get(context)
+
+
