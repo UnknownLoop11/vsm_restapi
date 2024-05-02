@@ -1,10 +1,13 @@
 import os
 
+import googlemaps
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from phonenumber_field.modelfields import PhoneNumberField
+
+from vsm_restapi import settings
 
 
 def delete_file(file_path):
@@ -13,17 +16,31 @@ def delete_file(file_path):
 
 
 # Create your models here.
-
+gmap = googlemaps.Client(key=settings.G_API_KEY)
 
 class Location(models.Model):
     address = models.CharField(max_length=255)
     lat = models.DecimalField(max_digits=20, decimal_places=16)
     long = models.DecimalField(max_digits=20, decimal_places=16)
+    def fill_cords(self, addrs):
+        coords = gmap.geocode(addrs)
+        if coords:
+            location = coords[0]['geometry']['location']
+            self.lat = float(location['lat'])
+            self.long = float(location['lng'])
+    def save(self, *args, **kwargs):
+
+        if not (self.lat and self.long):
+            self.fill_cords(self.address)
+
+        super().save(*args, **kwargs)
 
 
 class Pricing(models.Model):
-    per_page = models.DecimalField(max_digits=3, decimal_places=2)
-    color = models.DecimalField(max_digits=3, decimal_places=2)
+    normal = models.DecimalField(max_digits=5, decimal_places=2)
+    color = models.DecimalField(max_digits=5, decimal_places=2)
+    normal_2side = models.DecimalField(max_digits=5, decimal_places=2)
+    color_2side = models.DecimalField(max_digits=5, decimal_places=2)
 
 
 class Store(models.Model):
@@ -40,12 +57,15 @@ class Store(models.Model):
     def __str__(self):
         return self.store_name
 
+
+
     def delete(self, *args, **kwargs):
         location_instance = Location.objects.get(id=self.location.id)
         pricing_instance = Pricing.objects.get(id=self.pricing.id)
         super().delete(*args, **kwargs)
         location_instance.delete()
         pricing_instance.delete()
+
 
 class StoreImage(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -94,7 +114,8 @@ def delete_file_on_delete(sender, instance, **kwargs):
     # Delete the file when the record is deleted
     delete_file(instance.file.path)
 
+
 @receiver(post_delete, sender=StoreImage)
 def delete_file_on_delete(sender, instance, **kwargs):
     # Delete the file when the record is deleted
-    delete_file(instance.file.path)
+    delete_file(instance.image.path)

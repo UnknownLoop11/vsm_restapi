@@ -137,3 +137,5 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+G_API_KEY = os.getenv("API_KEY", "AIzaSyD9if-Qvdo9xp6rZA7Fh8-r21EG4uandTA")

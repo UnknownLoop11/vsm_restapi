@@ -70,9 +70,9 @@ class StoreRegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     contact_no = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
-    lat = serializers.DecimalField(max_digits=20, decimal_places=16)
-    long = serializers.DecimalField(max_digits=20, decimal_places=16)
-    cost = serializers.JSONField(required=True)
+    lat = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
+    long = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
+    pricing = serializers.JSONField(required=True)
     images = serializers.ListField(child=serializers.ImageField())
     gmap_link = serializers.URLField(required=True)
 
@@ -83,8 +83,10 @@ class StoreRegisterSerializer(serializers.Serializer):
             long=validated_data.get('long')
         )
         pricing_instance = Pricing.objects.create(
-            per_page=validated_data.get('cost')['per_page'],
-            color=validated_data.get('cost')['color']
+            normal=validated_data.get('pricing')['one_side'][0],
+            color=validated_data.get('pricing')['one_side'][1],
+            normal_2side=validated_data.get('pricing')['double_side'][0],
+            color_2side=validated_data.get('pricing')['double_side'][1],
         )
         store_instance = Store.objects.create(
             uid=validated_data['uid'],
@@ -175,9 +177,12 @@ class OrderUpdate(serializers.Serializer):
     accepted = serializers.BooleanField(required=False)
 
     def update(self, instance, validated_data):
-        print(validated_data)
 
         instance.status = validated_data.get('status', instance.status)
         instance.accepted = validated_data.get('accepted', instance.accepted)
         instance.save()
         return validated_data
+
+class GetLocationParams(serializers.Serializer):
+    lat = serializers.FloatField(required=True)
+    long = serializers.FloatField(required=True)

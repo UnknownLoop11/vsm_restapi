@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import StoreSerializer, CustomerSerializer, StoreRegisterSerializer, StoreParameters, \
-    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, StoreImageSerializer
+    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, StoreImageSerializer, GetLocationParams
 from main.models import Store, Customer, File, StoreImage
 from api.services import Services, CustomResponse
 
@@ -17,6 +17,18 @@ response = CustomResponse()
 
 
 # Function-Based Views
+
+@api_view(['GET'])
+def get_location(request):
+    params = GetLocationParams(data=request.query_params)
+    if params.is_valid():
+        lat = params.validated_data.get('lat')
+        long = params.validated_data.get('long')
+        location = services.get_loc(lat,long)
+        return Response({'location': location}, status=status.HTTP_200_OK)
+    return Response({'error': "Provide 'lat' and 'long' query parameters."}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['POST'])
 def register_store(request):
@@ -127,7 +139,6 @@ class StoreOrder(APIView):
         params = StoreParameters(data=request.query_params)
         if params.is_valid():
             serializer = StoreOrderSerializer(data=request.data)
-            print(request.data)
             if serializer.is_valid():
                 serializer.save()
                 # print(serializer.data)

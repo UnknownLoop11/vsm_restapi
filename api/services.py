@@ -1,12 +1,20 @@
+import googlemaps
 from haversine import haversine, Unit
 
 from main.models import Store, Customer
 from api.serializers import StoreSerializer
+from vsm_restapi import settings
+
+gmap = googlemaps.Client(key=settings.G_API_KEY)
 
 
 class Services:
     def __init__(self):
         pass
+
+    def get_loc(self, lat, long):
+        loc = gmap.reverse_geocode((lat, long))
+        return loc[0]['formatted_address']
 
     def get_store(self, uid):
         try:
