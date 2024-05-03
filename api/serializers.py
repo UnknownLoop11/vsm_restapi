@@ -100,11 +100,12 @@ class StoreRegisterSerializer(serializers.Serializer):
             gmap_link=validated_data.get('gmap_link')
         )
 
-        for image in validated_data.get('images'):
-            store_image_instance = StoreImage.objects.create(
-                store=store_instance,
-                image=image
-            )
+        if validated_data.get('images'):
+            for image in validated_data.get('images'):
+                store_image_instance = StoreImage.objects.create(
+                    store=store_instance,
+                    image=image
+                )
 
         return validated_data
 
