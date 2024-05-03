@@ -73,7 +73,7 @@ class StoreRegisterSerializer(serializers.Serializer):
     lat = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     long = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     pricing = serializers.JSONField(required=True)
-    images = serializers.ListField(child=serializers.ImageField())
+    images = serializers.ListField(child=serializers.ImageField(), required=False)
     gmap_link = serializers.URLField(required=True)
 
     def create(self, validated_data):
