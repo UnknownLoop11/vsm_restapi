@@ -22,7 +22,7 @@ class PricingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class StoreImageSerializer(serializers.ModelSerializer):
+class StoreImageUrlSerializer(serializers.ModelSerializer):
     store = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = StoreImage
@@ -73,7 +73,7 @@ class StoreRegisterSerializer(serializers.Serializer):
     lat = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     long = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     pricing = serializers.JSONField(required=True)
-    images = serializers.ListField(child=serializers.ImageField(), required=False)
+    images = serializers.ListField(child=serializers.URLField(), required=False)
     gmap_link = serializers.URLField(required=True)
 
     def create(self, validated_data):
@@ -101,10 +101,10 @@ class StoreRegisterSerializer(serializers.Serializer):
         )
 
         if validated_data.get('images'):
-            for image in validated_data.get('images'):
+            for url in validated_data.get('images'):
                 store_image_instance = StoreImage.objects.create(
                     store=store_instance,
-                    image=image
+                    image_url=url
                 )
 
         return validated_data

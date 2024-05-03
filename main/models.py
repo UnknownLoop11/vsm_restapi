@@ -69,7 +69,7 @@ class Store(models.Model):
 
 class StoreImage(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/')
+    image_url = models.URLField()
 
 
 class OrderDetails(models.Model):
@@ -115,7 +115,3 @@ def delete_file_on_delete(sender, instance, **kwargs):
     delete_file(instance.file.path)
 
 
-@receiver(post_delete, sender=StoreImage)
-def delete_file_on_delete(sender, instance, **kwargs):
-    # Delete the file when the record is deleted
-    delete_file(instance.image.path)

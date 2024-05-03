@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import StoreSerializer, CustomerSerializer, StoreRegisterSerializer, StoreParameters, \
-    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, StoreImageSerializer, GetLocationParams
+    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, StoreImageUrlSerializer, GetLocationParams
 from main.models import Store, Customer, File, StoreImage
 from api.services import Services, CustomResponse
 
@@ -83,7 +83,7 @@ def get_store_images(request):
     if params.is_valid():
         uid = params.validated_data.get('uid')  # User id
         images = StoreImage.objects.filter(store__uid=uid)
-        serializer = StoreImageSerializer(images, many=True)
+        serializer = StoreImageUrlSerializer(images, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(response.get_response('error'), status=status.HTTP_400_BAD_REQUEST)
 
