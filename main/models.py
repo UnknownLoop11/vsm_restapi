@@ -67,11 +67,6 @@ class Store(models.Model):
         pricing_instance.delete()
 
 
-class StoreImage(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    image_url = models.URLField()
-
-
 class OrderDetails(models.Model):
     type = models.CharField(max_length=50)
     copies = models.PositiveIntegerField()

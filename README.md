@@ -17,8 +17,7 @@
 "pricing": {"one_side":  [1,5], "double_side": [5,10] }, <br>
 "address": "1 Rocket Road, Hawthorne, California, 90250",<br>
 "lat": 12.969872242527739,<br>
-"long": 77.62446195242269,<br>
-"images": ["https://www.google.com", "https://www..name.com"], <br>
+"long": 77.62446195242269,<br><br>
 "gmap_link": "<https://maps.app.goo.gl/qC4L2YosoVzFLS7CA>"<br>
 }
 >
@@ -93,6 +92,5 @@
 > > -    path('store/order', StoreOrder.as_view(), name='store_view'),  # POST, GET, PUT, DELETE
 > > -    path('store/order/list', get_store_orders, name="store_orders_list"),  # GET
 > > -    path('store/order/download/<int:ref_id>', generate_files, name='download_files'),
-> > -    path('store/images', get_store_images, name="store_image")
 > > -    path('get-location', get_location, name="get-location"),
 

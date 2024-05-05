@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import StoreSerializer, CustomerSerializer, StoreRegisterSerializer, StoreParameters, \
-    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, StoreImageUrlSerializer, GetLocationParams
-from main.models import Store, Customer, File, StoreImage
+    StoreProfileUpdate, StoreOrderSerializer, OrderUpdate, GetLocationParams
+from main.models import Store, Customer, File
 from api.services import Services, CustomResponse
 
 services = Services()
@@ -76,16 +76,6 @@ def generate_files(request, ref_id):
     response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
     response['Content-Disposition'] = f'attachment; filename="{name.name}.zip"'
     return response
-
-@api_view(['GET'])
-def get_store_images(request):
-    params = StoreParameters(data=request.query_params)
-    if params.is_valid():
-        uid = params.validated_data.get('uid')  # User id
-        images = StoreImage.objects.filter(store__uid=uid)
-        serializer = StoreImageUrlSerializer(images, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(response.get_response('error'), status=status.HTTP_400_BAD_REQUEST)
 
 
 # Class-Based Views

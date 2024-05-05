@@ -1,7 +1,7 @@
 import random
 from rest_framework import serializers
 
-from main.models import Store, Location, Customer, OrderDetails, File, Pricing, StoreImage
+from main.models import Store, Location, Customer, OrderDetails, File, Pricing
 from phonenumber_field.serializerfields import PhoneNumberField
 
 
@@ -21,12 +21,6 @@ class PricingSerializer(serializers.ModelSerializer):
         model = Pricing
         fields = '__all__'
 
-
-class StoreImageUrlSerializer(serializers.ModelSerializer):
-    store = serializers.StringRelatedField(read_only=True)
-    class Meta:
-        model = StoreImage
-        fields = '__all__'
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -73,7 +67,6 @@ class StoreRegisterSerializer(serializers.Serializer):
     lat = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     long = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
     pricing = serializers.JSONField(required=True)
-    images = serializers.ListField(child=serializers.URLField(), required=False)
     gmap_link = serializers.URLField(required=True)
 
     def create(self, validated_data):
@@ -99,13 +92,6 @@ class StoreRegisterSerializer(serializers.Serializer):
             pricing=pricing_instance,
             gmap_link=validated_data.get('gmap_link')
         )
-
-        if validated_data.get('images'):
-            for url in validated_data.get('images'):
-                store_image_instance = StoreImage.objects.create(
-                    store=store_instance,
-                    image_url=url
-                )
 
         return validated_data
 
