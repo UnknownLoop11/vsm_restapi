@@ -16,14 +16,18 @@ class Services:
         loc = gmap.reverse_geocode((lat, long))
         return loc[0]['formatted_address']
 
-    def get_store(self, uid):
+    def get_store(self, uid, coords=None):
         try:
             store = Store.objects.get(uid=uid)
-            serializer = StoreSerializer(store)
+            serializer = StoreSerializer(store).data
         except:
             return {'error': 'Invalid user id provided.'}
 
-        return serializer.data
+        if coords:
+            distance = haversine((coords['lat'], coords['long']), (store.location.lat, store.location.long), unit=Unit.METERS)
+            serializer.update({'distance': round(distance, 2), 'unit': 'meters(m)'})
+
+        return serializer
 
     def get_store_list(self, **kwargs):
         params = ['lat', 'long', 'rad']

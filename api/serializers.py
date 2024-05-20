@@ -99,6 +99,9 @@ class StoreRegisterSerializer(serializers.Serializer):
 class StoreParameters(serializers.Serializer):
     uid = serializers.CharField(required=True)
     ref_id = serializers.IntegerField(required=False)
+    lat = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
+    long = serializers.DecimalField(max_digits=20, decimal_places=16, required=False)
+    rad = serializers.IntegerField(required=False)
 
 
 class StoreProfileUpdate(serializers.Serializer):

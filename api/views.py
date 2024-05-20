@@ -85,7 +85,15 @@ class StoreProfile(APIView):
         params = StoreParameters(data=request.query_params)  # For query params
         if params.is_valid():
             uid = params.validated_data.get('uid')  # User id
-            obj = services.get_store(uid)
+            if all(key in params.validated_data for key in ['lat', 'long', 'rad']):
+                coords = {
+                    'lat': float(params.validated_data.get('lat')),
+                    'long': float(params.validated_data.get('long')),
+                    'rad': float(params.validated_data.get('rad'))
+                }
+                obj = services.get_store(uid, coords)
+            else:
+                obj = services.get_store(uid)
             return Response(obj, status=status.HTTP_201_CREATED)
 
         return Response(params.errors, status=status.HTTP_400_BAD_REQUEST)
