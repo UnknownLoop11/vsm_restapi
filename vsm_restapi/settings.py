@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'vsm_restapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if os.getenv("DATABASE_URL"):
+if os.getenv("HEROKU_POSTGRESQL_GOLD_URL"):
     DATABASES = {
-        'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+        'default': dj_database_url.config(default=os.getenv("HEROKU_POSTGRESQL_GOLD_URL"))
     }
 else:
     DATABASES = {
@@ -88,16 +88,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'NAME': 'prerox',
-    #         'USER': 'postgres',
-    #         'PASSWORD': 'postgres',
-    #         'HOST': 'localhost',
-    #         'PORT': '5432',
-    #     }
-    # }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
