@@ -1,5 +1,7 @@
 # __Vsm Rest Api Documentation__
 
+A basic rest API was created using the Django restful framework to handle basic and some complex functionalities and provide seamless communications to the frontend client App.
+
 ### Api EndPoint - <https://prerox-api-8d59017b6b2c.herokuapp.com/>
 
 ---
